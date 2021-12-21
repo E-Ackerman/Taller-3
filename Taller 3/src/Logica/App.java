@@ -1,7 +1,6 @@
 
 package Logica;
 
-import Dominio.Cliente;
 
 
 public class App 

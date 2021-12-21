@@ -25,7 +25,9 @@ public class ListaEntregas
         }
         else 
         {
-            
+            last.setNext(nuevo);
+            first.setPrevio(nuevo);
+            nuevo.setPrevio(null);
         }
         nuevo.setNext(first);
         first = nuevo;
@@ -33,57 +35,104 @@ public class ListaEntregas
         return true;
     }
     
-//    public Cliente getI (int index) 
-//    {
-//        Nodo<Cliente> current = first;
-//        int i;
-//        for(i=0;i<cant;i++) 
-//        {
-//            if(index == i) 
-//            {
-//                break;
-//            }
-//            else 
-//            {
-//                current = current.getNext();
-//            }
-//        }
-//        
-//        if(i==cant) 
-//        {
-//            return null;
-//        }
-//        else 
-//        {
-//            return current.getDato();
-//        }
-//    }
-//    
-//    public Cliente buscarRut (String rut) 
-//    {
-//        Nodo<Cliente> current = first;
-//        int i;
-//        for(i=0;i<cant;i++) 
-//        {
-//            if(current.getDato().getRut().equals(rut)) 
-//            {
-//                break;
-//            }
-//            else 
-//            {
-//                current = current.getNext();
-//            }
-//        }
-//        
-//        if(i==cant) 
-//        {
-//            return null;
-//        }
-//        else 
-//        {
-//            return current.getDato();
-//        }
-//    }
+    public Entrega getI (int index) 
+    {
+        Nodo<Entrega> current = first;
+        int i;
+        for(i=0;i<cant;i++) 
+        {
+            if(index == i) 
+            {
+                break;
+            }
+            else 
+            {
+                current = current.getNext();
+            }
+        }
+        
+        if(i==cant) 
+        {
+            return null;
+        }
+        else 
+        {
+            return current.getDato();
+        }
+    }
+    
+    public Entrega buscarCodigo (int codigo) 
+    {
+        Nodo<Entrega> current = first;
+        int i;
+        for(i=0;i<cant;i++) 
+        {
+            if(current.getDato().getCodigo() == codigo) 
+            {
+                break;
+            }
+            else 
+            {
+                current = current.getNext();
+            }
+        }
+        
+        if(i==cant) 
+        {
+            return null;
+        }
+        else 
+        {
+            return current.getDato();
+        }
+    }
+    
+    public boolean eliminarEntrega (int codigo) 
+    {
+        Nodo<Entrega> current = first;
+        int i;
+        for(i=0;i<cant;i++) 
+        {
+            if(current.getDato().getCodigo() == codigo) 
+            {
+                break;
+            }
+            else 
+            {
+                current = current.getNext();
+            }
+        }
+        if(i==cant) 
+        {
+            return false;
+        }
+        else 
+        {
+            if(cant == 1)
+            {
+                first = null;
+                last = null;
+            }
+            else if(current == first) 
+            {
+                first = current.getNext();
+                last.setNext(first);
+                first.setPrevio(null);
+            }
+            else if(current == last) 
+            {
+                last = current.getPrevio();
+                last.setNext(first);
+            }
+            else 
+            {
+                current.getNext().setPrevio(current.getPrevio());
+                current.getPrevio().setNext(current.getNext());
+            }
+            cant--;
+            return true;
+        }
+    }
 
     public int getCant() {
         return cant;
