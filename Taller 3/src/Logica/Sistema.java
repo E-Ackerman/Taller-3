@@ -8,7 +8,7 @@ public interface Sistema
     public boolean ingresarCliente (String rut, String nombre, String apellido, int saldo, String ciudad);
     public boolean ingresarDocumento (int codigo, int peso, int grosor);
     public boolean ingresarEncomienda (int codigo, int peso, int largo, int ancho, int profundidad);
-    public boolean ingresarValija (int codigo, int peso, String material);
+    public boolean ingresarValija (int codigo, String material, int peso);
     public void asociarClienteOficina (String rut, String ciudad);
     public void asociarEntregaCliente (int codigo, String rutRemitente, String rutDestinatario);
     public boolean verificarSesion (String rut);

@@ -8,7 +8,7 @@ public class Documento extends Entrega
 
     public Documento(int codigo, int peso, int grosor) {
         super(codigo, peso);
-        this.grosor = (grosor/10); // El grosor se pasa de milimetros a centimetros.
+        this.grosor = grosor; 
     }
 
     public int getGrosor() {
@@ -22,7 +22,7 @@ public class Documento extends Entrega
     @Override
     public double getValor() 
     {
-        double valor = (this.getPeso()/1000) * grosor * 100;   // El peso se pasa de gramos a kilogramos
+        double valor = (this.getPeso()/1000) * (grosor/10) * 100;   // El peso se pasa de gramos a kilogramos y el grosor se pasa de milimetros a centimetros.
         return valor;
     }
     

@@ -1,0 +1,4 @@
+7.777.777-7,NombreC,ApellidoC,40000,Coquimbo
+8.888.888-8,NombreB,ApellidoB,12000,La Serena
+9.999.999-9,NombreA,ApellidoA,20000,Santiago
+1.111.111-1,Pablo,Rios,100000,Ovalle

@@ -10,9 +10,9 @@ public class Encomienda extends Entrega
 
     public Encomienda(int codigo, int peso, int largo, int ancho, int profundidad) {
         super(codigo, peso);
-        this.largo = (largo /100); // se pasa de centimetros a metros en todas las longitudes
-        this.ancho = (ancho/100);
-        this.profundidad = (profundidad /100);
+        this.largo = largo; 
+        this.ancho = ancho;
+        this.profundidad = profundidad;
     }
 
     public int getLargo() {
@@ -42,7 +42,7 @@ public class Encomienda extends Entrega
     @Override
     public double getValor() 
     {
-        double valor = (this.getPeso()/1000) * (largo*ancho*profundidad) * 50;   // Se hace el cambio del peso de gr a kg
+        double valor = (this.getPeso()/1000) * ((largo /100)*(ancho/100)*(profundidad /100)) * 50;   // Se hace el cambio del peso de gr a kg y se pasa de centimetros a metros en todas las longitudes
         return valor;
     }
     
