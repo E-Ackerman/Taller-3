@@ -6,7 +6,7 @@ public class Valija extends Entrega
 {
     private String material;
     
-    public Valija(int codigo, int peso, String material) {
+    public Valija(int codigo, double peso, String material) {
         super(codigo, peso);
         this.material = material;
     }

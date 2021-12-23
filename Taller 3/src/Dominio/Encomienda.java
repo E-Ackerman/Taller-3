@@ -4,38 +4,38 @@ package Dominio;
 
 public class Encomienda extends Entrega
 {
-    private int largo;
-    private int ancho;
-    private int profundidad;
+    private double largo;
+    private double ancho;
+    private double profundidad;
 
-    public Encomienda(int codigo, int peso, int largo, int ancho, int profundidad) {
+    public Encomienda(int codigo, double peso, double largo, double ancho, double profundidad) {
         super(codigo, peso);
         this.largo = largo; 
         this.ancho = ancho;
         this.profundidad = profundidad;
     }
 
-    public int getLargo() {
+    public double getLargo() {
         return largo;
     }
 
-    public void setLargo(int largo) {
+    public void setLargo(double largo) {
         this.largo = largo;
     }
 
-    public int getAncho() {
+    public double getAncho() {
         return ancho;
     }
 
-    public void setAncho(int ancho) {
+    public void setAncho(double ancho) {
         this.ancho = ancho;
     }
 
-    public int getProfundidad() {
+    public double getProfundidad() {
         return profundidad;
     }
 
-    public void setProfundidad(int profundidad) {
+    public void setProfundidad(double profundidad) {
         this.profundidad = profundidad;
     }
     

@@ -32,7 +32,7 @@ public class SistemaImpl implements Sistema
     }
 
     @Override
-    public boolean ingresarDocumento(int codigo, int peso, int grosor) 
+    public boolean ingresarDocumento(int codigo, double peso, double grosor) 
     {
         Entrega documento = new Documento(codigo,peso,grosor);
         boolean ingreso = listaentregas.ingresarEntrega(documento);
@@ -40,7 +40,7 @@ public class SistemaImpl implements Sistema
     }
 
     @Override
-    public boolean ingresarEncomienda(int codigo, int peso, int largo, int ancho, int profundidad) 
+    public boolean ingresarEncomienda(int codigo, double peso, double largo, double ancho, double profundidad) 
     {
         Entrega encomienda = new Encomienda(codigo,peso,largo,ancho,profundidad);
         boolean ingreso = listaentregas.ingresarEntrega(encomienda);
@@ -48,7 +48,7 @@ public class SistemaImpl implements Sistema
     }
 
     @Override
-    public boolean ingresarValija(int codigo, String material, int peso) 
+    public boolean ingresarValija(int codigo, String material, double peso) 
     {
         Entrega valija = new Valija(codigo,peso,material);
         boolean ingreso = listaentregas.ingresarEntrega(valija);
@@ -94,7 +94,19 @@ public class SistemaImpl implements Sistema
                     entrega.setRemitente(remitente);
                     entrega.setDestinatario(destinatario);
                     remitente.getLe().ingresarEntrega(entrega);
-                    destinatario.getLe().ingresarEntrega(entrega);        
+                    destinatario.getLe().ingresarEntrega(entrega);   
+                    Oficina oficina1 = listaoficinas.buscarNombre(remitente.getCiudad());
+                    Oficina oficina2 = listaoficinas.buscarNombre(destinatario.getCiudad());
+                    
+                    if(oficina1 !=null && oficina2!=null) 
+                    {
+                        oficina1.getLe().ingresarEntrega(entrega);
+                        oficina2.getLe().ingresarEntrega(entrega);
+                    }
+                    else 
+                    {
+                        throw new NullPointerException("No se encontro la/las oficinas");
+                    }
                 }
                 else 
                 {
@@ -113,48 +125,279 @@ public class SistemaImpl implements Sistema
     }
 
     @Override
-    public boolean verificarSesion(String rut) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean verificarSesion(String rut) 
+    {
+        return (listaclientes.buscarRut(rut) != null);
     }
 
     @Override
-    public void realizarPago(String rut, int codigo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String realizarPago(String rut, int codigo, String remitente, String destinatario) 
+    {
+        String salida = "";
+        Cliente cliente = listaclientes.buscarRut(rut);
+        if(cliente!=null) 
+        {
+            Entrega entrega = listaentregas.buscarCodigo(codigo);
+            if(entrega!=null) 
+            {
+                if(cliente.getSaldo() < entrega.getValor()) 
+                {
+                    salida = "1";
+                }
+                else 
+                {
+                    cliente.setSaldo(cliente.getSaldo() - (int)entrega.getValor()); 
+                    Cliente remitente1 = listaclientes.buscarRut(remitente);
+                    Cliente destinatario1 = listaclientes.buscarRut(destinatario);
+                    entrega.setDestinatario(destinatario1);
+                    entrega.setRemitente(remitente1);
+                    remitente1.getLe().ingresarEntrega(entrega);
+                    destinatario1.getLe().ingresarEntrega(entrega);   
+                    Oficina oficina1 = listaoficinas.buscarNombre(remitente1.getCiudad());
+                    Oficina oficina2 = listaoficinas.buscarNombre(destinatario1.getCiudad());
+                    
+                    if(oficina1 !=null && oficina2!=null) 
+                    {
+                        oficina1.getLe().ingresarEntrega(entrega);
+                        oficina2.getLe().ingresarEntrega(entrega);
+                    }
+                    else 
+                    {
+                        throw new NullPointerException("No se encontro la/las oficinas");
+                    }
+                    salida = "2";
+                }
+            }
+            else 
+            {
+                System.out.println("No se encontro la entrega");
+            }
+        }
+        else 
+        {
+            throw new NullPointerException("No se encontro el cliente");
+        }
+        return salida;
     }
 
     @Override
-    public boolean anularEntrega(String rut, int codigo) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean verificarCodigo( int codigo) 
+    {
+        Entrega entrega = listaentregas.buscarCodigo(codigo);
+        
+        if(entrega!=null) 
+        {
+            return true;
+        }
+        else 
+        {
+            return false;
+        }    
     }
 
     @Override
-    public boolean recargarSaldo(String rut, int monto) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void recargarSaldo(String rut, int monto) 
+    {
+        Cliente cliente = listaclientes.buscarRut(rut);
+        
+        if(cliente!=null) 
+        {
+            cliente.setSaldo(cliente.getSaldo()+monto); 
+        }
+        else 
+        {
+            throw new NullPointerException("No se encontro el cliente");
+        }
     }
 
     @Override
-    public boolean obtenerEntregas(String rut) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String obtenerEntregas(String rut) 
+    {
+        String salida = "";
+        Cliente cliente = listaclientes.buscarRut(rut);
+        if(cliente!=null) 
+        {
+            for(int i=0;i<cliente.getLe().getCant();i++) 
+            {
+                Entrega entrega = cliente.getLe().getI(i); 
+                if(entrega instanceof Documento) 
+                {
+                    Documento documento = (Documento) entrega;
+                    if(documento.getRemitente().getRut().equals(rut))
+                    {
+                        salida += "\n- Entrega REALIZADA de Documento de codigo " + documento.getCodigo() + " con un peso de " + documento.getPeso() + " gramos";
+                    }
+                    else 
+                    {
+                        salida += "\n- Entrega RECIBIDA de Documento de codigo " + documento.getCodigo() + " con un peso de " + documento.getPeso() + " gramos";
+                    }
+                }
+                else if (entrega instanceof Encomienda) 
+                {
+                    Encomienda encomienda = (Encomienda) entrega;
+                    if(encomienda.getRemitente().getRut().equals(rut))
+                    {
+                        salida += "\n- Entrega REALIZADA de Encomienda de codigo " + encomienda.getCodigo() + " con un peso de " + encomienda.getPeso() + " gramos";
+                    }
+                    else 
+                    {
+                        salida += "\n- Entrega RECIBIDA de Encomienda de codigo " + encomienda.getCodigo() + " con un peso de " + encomienda.getPeso() + " gramos";
+                    }
+                }
+                else 
+                {
+                    Valija valija = (Valija) entrega;
+                    if(valija.getRemitente().getRut().equals(rut))
+                    {
+                        salida += "\n- Entrega REALIZADA de Valija de codigo " + valija.getCodigo() + " con un peso de " + valija.getPeso() + " gramos";
+                    }
+                    else 
+                    {
+                        salida += "\n- Entrega RECIBIDA de Valija de codigo " + valija.getCodigo() + " con un peso de " + valija.getPeso() + " gramos";
+                    }
+                }
+            }
+        }
+        else 
+        {
+            throw new NullPointerException("No se encontro el cliente");
+        }
+        return salida;
     }
 
     @Override
-    public String obtenerEntregasTipo() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String obtenerEntregasTipo() 
+    {
+        String salida = "";
+        
+        for(int i=0;i<listaentregas.getCant();i++) 
+        {
+            Entrega entrega = listaentregas.getI(i);
+            
+            if(entrega instanceof Documento) 
+            {
+                Documento documento = (Documento) entrega;
+                salida += "\n Documento - valor: $" + documento.getValor();
+            }
+            else if(entrega instanceof Encomienda) 
+            {
+                Encomienda encomienda = (Encomienda) entrega;
+                salida += "\n Encomienda - valor: $" + encomienda.getValor();
+            }
+            else 
+            {
+                Valija valija = (Valija) entrega;
+                salida += "\n Valija - valor: $" + valija.getValor();
+            }
+        }
+        
+        return salida;
     }
 
     @Override
-    public String obtenerEntregasLocalizacion() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String obtenerEntregasLocalizacion() 
+    {
+        String salida = "";
+        for(int a=0;a<listaoficinas.getCant();a++) 
+        {
+            Oficina oficina = listaoficinas.getI(a);
+            int recibidos = 0;
+            int realizados = 0;
+            salida += "\n"+ oficina.getNombre();
+            for(int b=0;b<oficina.getLe().getCant();b++) 
+            {
+                Entrega entrega = oficina.getLe().getI(b);
+                if(entrega.getDestinatario().getCiudad().equals(oficina.getNombre())) 
+                {
+                    recibidos++;
+                }
+                else 
+                {
+                    realizados++;
+                }
+            }
+            salida += " realizo " + realizados + " envíos y recibió " + recibidos + " envíos";
+        }
+        
+        return salida;
     }
 
     @Override
-    public String obtenerEntregasCliente() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String obtenerEntregasCliente() 
+    {
+        String salida = "";
+        for(int a=0;a<listaclientes.getCant();a++) 
+        {
+            Cliente cliente = listaclientes.getI(a);
+            salida += "\n -"+ cliente.getNombre() + " " + cliente.getApellido() + " tiene:";
+            
+            for(int b=0;b<cliente.getLe().getCant();b++) 
+            {
+                Entrega entrega = cliente.getLe().getI(b);
+                if(entrega instanceof Documento) 
+                {
+                    Documento documento = (Documento) entrega;
+                    salida += "\n   - Documento de codigo "+ documento.getCodigo();
+                }
+                else if(entrega instanceof Encomienda) 
+                {
+                    Encomienda encomienda = (Encomienda) entrega;
+                    salida += "\n   - Encomienda de codigo " + encomienda.getCodigo();
+                }
+                else 
+                {
+                    Valija valija = (Valija) entrega;
+                    salida += "\n   - Valija de codigo " + valija.getCodigo();
+                }
+            }
+        }
+        
+        return salida;
     }
 
     @Override
-    public String obtenerRegistro() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String obtenerRegistro() 
+    {
+        String salida ="";
+        double total = 0;
+        for(int a=0;a<listaoficinas.getCant();a++) 
+        {
+            Oficina oficina = listaoficinas.getI(a);
+            double ganancias = 0;
+            for(int b=0;b<oficina.getLe().getCant();b++) 
+            {
+                Entrega entrega = oficina.getLe().getI(b);
+                if(entrega instanceof Documento) 
+                {
+                    Documento documento = (Documento) entrega;
+                    if(documento.getRemitente().getCiudad().equals(oficina.getNombre())) 
+                    {
+                        ganancias += documento.getValor();
+                    }                    
+                }
+                else if(entrega instanceof Encomienda) 
+                {
+                    Encomienda encomienda = (Encomienda) entrega;
+                    if(encomienda.getRemitente().getCiudad().equals(oficina.getNombre())) 
+                    {
+                        ganancias += encomienda.getValor();
+                    }
+                }
+                else 
+                {
+                    Valija valija =(Valija) entrega;
+                    if(valija.getRemitente().getCiudad().equals(oficina.getNombre())) 
+                    {
+                        ganancias += valija.getValor();
+                    }
+                }
+            }
+            salida += "\n - Oficina de " + oficina.getNombre() + " obtuvo ganancias de $" + ganancias;
+            total += ganancias;
+        }
+        salida += "\nEl balance total de ganancias fue de $" + total;
+        
+        return salida;
     }
 
     @Override

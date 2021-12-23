@@ -5,11 +5,11 @@ package Dominio;
 public abstract class Entrega 
 {
     private int codigo;
-    private int peso;
+    private double peso;
     private Cliente remitente;
     private Cliente destinatario;
 
-    public Entrega(int codigo, int peso) {
+    public Entrega(int codigo, double peso) {
         this.codigo = codigo;
         this.peso = peso;
     }
@@ -22,11 +22,11 @@ public abstract class Entrega
         this.codigo = codigo;
     }
 
-    public int getPeso() {
+    public double getPeso() {
         return peso;
     }
 
-    public void setPeso(int peso) {
+    public void setPeso(double peso) {
         this.peso = peso;
     }
     
