@@ -15,6 +15,11 @@ public class SistemaImpl implements Sistema
         listaentregas = new ListaEntregas();
     }
 
+    /**
+     * Method that enters the office to the list of offices
+     * @param ciudad
+     * @return 
+     */
     @Override
     public boolean ingresarLocalizacion(String ciudad) 
     {
@@ -23,6 +28,15 @@ public class SistemaImpl implements Sistema
         return ingreso;
     }
 
+    /**
+     * Method that the customer enters the customer list.
+     * @param rut
+     * @param nombre
+     * @param apellido
+     * @param saldo
+     * @param ciudad
+     * @return 
+     */
     @Override
     public boolean ingresarCliente(String rut, String nombre, String apellido, int saldo, String ciudad) 
     {
@@ -31,6 +45,13 @@ public class SistemaImpl implements Sistema
         return ingreso;
     }
 
+    /**
+     * Method that enters the document to the delivery list
+     * @param codigo
+     * @param peso
+     * @param grosor
+     * @return 
+     */
     @Override
     public boolean ingresarDocumento(int codigo, double peso, double grosor) 
     {
@@ -39,6 +60,15 @@ public class SistemaImpl implements Sistema
         return ingreso;
     }
 
+    /**
+     * Method that enters the order to the delivery list
+     * @param codigo
+     * @param peso
+     * @param largo
+     * @param ancho
+     * @param profundidad
+     * @return 
+     */
     @Override
     public boolean ingresarEncomienda(int codigo, double peso, double largo, double ancho, double profundidad) 
     {
@@ -47,6 +77,13 @@ public class SistemaImpl implements Sistema
         return ingreso;
     }
 
+    /**
+     * Method that enters the bag to the delivery list.
+     * @param codigo
+     * @param material
+     * @param peso
+     * @return 
+     */
     @Override
     public boolean ingresarValija(int codigo, String material, double peso) 
     {
@@ -55,6 +92,11 @@ public class SistemaImpl implements Sistema
         return ingreso;
     }
 
+    /**
+     * The client is associated with the office in the city
+     * @param rut
+     * @param ciudad 
+     */
     @Override
     public void asociarClienteOficina(String rut, String ciudad) 
     {
@@ -79,6 +121,12 @@ public class SistemaImpl implements Sistema
         }
     }
 
+    /**
+     * Customers are associated with delivery and delivery to the customer's city
+     * @param codigo
+     * @param rutRemitente
+     * @param rutDestinatario 
+     */
     @Override
     public void asociarEntregaCliente(int codigo, String rutRemitente, String rutDestinatario) 
     {
@@ -124,12 +172,25 @@ public class SistemaImpl implements Sistema
         }
     }
 
+    /**
+     * The entered rut is verified
+     * @param rut
+     * @return 
+     */
     @Override
     public boolean verificarSesion(String rut) 
     {
         return (listaclientes.buscarRut(rut) != null);
     }
 
+    /**
+     * Method that makes the payment for the delivery, in addition to adding the delivery to each particular list and to the general
+     * @param rut
+     * @param codigo
+     * @param remitente
+     * @param destinatario
+     * @return 
+     */
     @Override
     public String realizarPago(String rut, int codigo, String remitente, String destinatario) 
     {
@@ -180,8 +241,13 @@ public class SistemaImpl implements Sistema
         return salida;
     }
 
+    /**
+     * It is verified if the code created randomly exists so that it is not repeat, since the code is unique
+     * @param codigo
+     * @return 
+     */
     @Override
-    public boolean verificarCodigo( int codigo) 
+    public boolean verificarCodigo(int codigo) 
     {
         Entrega entrega = listaentregas.buscarCodigo(codigo);
         
@@ -195,6 +261,11 @@ public class SistemaImpl implements Sistema
         }    
     }
 
+    /**
+     * Balance is recharged to the customer's account
+     * @param rut
+     * @param monto 
+     */
     @Override
     public void recargarSaldo(String rut, int monto) 
     {
@@ -210,6 +281,11 @@ public class SistemaImpl implements Sistema
         }
     }
 
+    /**
+     * The data of the deliveries that the client has made and received are obtained
+     * @param rut
+     * @return 
+     */
     @Override
     public String obtenerEntregas(String rut) 
     {
@@ -265,6 +341,10 @@ public class SistemaImpl implements Sistema
         return salida;
     }
 
+    /**
+     * Method that obtains the deliveries by type with their value.
+     * @return 
+     */
     @Override
     public String obtenerEntregasTipo() 
     {
@@ -294,6 +374,10 @@ public class SistemaImpl implements Sistema
         return salida;
     }
 
+    /**
+     * Method that obtains the quantity of deliveries sent and received by location.
+     * @return 
+     */
     @Override
     public String obtenerEntregasLocalizacion() 
     {
@@ -322,6 +406,10 @@ public class SistemaImpl implements Sistema
         return salida;
     }
 
+    /**
+     * Method that obtains all deliveries for each client.
+     * @return 
+     */
     @Override
     public String obtenerEntregasCliente() 
     {
@@ -355,6 +443,10 @@ public class SistemaImpl implements Sistema
         return salida;
     }
 
+    /**
+     * The earnings for each office are calculated and obtained, as well the total balance.
+     * @return 
+     */
     @Override
     public String obtenerRegistro() 
     {
@@ -400,6 +492,10 @@ public class SistemaImpl implements Sistema
         return salida;
     }
 
+    /**
+     * Method that gets all the customer data for the text file
+     * @return 
+     */
     @Override
     public String obtenerClientes() 
     {
@@ -412,6 +508,10 @@ public class SistemaImpl implements Sistema
         return salida;
     }
 
+    /**
+     * Method that gets all the data from the deliverables to the text file
+     * @return 
+     */
     @Override
     public String obtenerEntregas() 
     {

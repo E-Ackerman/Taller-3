@@ -10,6 +10,10 @@ import java.util.Scanner;
 
 public class App 
 {
+    /**
+     * Method that saves the data from the text file
+     * @param sistema 
+     */
     public static void LeerLocalizaciones(SistemaImpl sistema) 
     {
         try
@@ -28,6 +32,10 @@ public class App
         }
     }
     
+    /**
+     * Method that saves the data from the text file
+     * @param sistema 
+     */
     public static void LeerClientes(SistemaImpl sistema) 
     {
         try
@@ -55,6 +63,10 @@ public class App
         }
     }
     
+    /**
+     * Method that saves the data from the text file
+     * @param sistema 
+     */
     public static void LeerEntregas (SistemaImpl sistema) 
     {
         try
@@ -407,6 +419,10 @@ public class App
         SobrescribirEnvios (sistema);
     }
     
+    /**
+     * Method that overwrites the system data in the text file
+     * @param sistema 
+     */
     public static void SobrescribirClientes(SistemaImpl sistema) 
     {
         try
@@ -422,6 +438,10 @@ public class App
         }
     }
     
+    /**
+     * Method that overwrites the system data in the text file
+     * @param sistema 
+     */
     public static void SobrescribirEnvios (SistemaImpl sistema) 
     {
         try
